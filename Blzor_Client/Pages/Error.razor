@@ -1,0 +1,17 @@
+﻿@page "/error"
+@inject NavigationManager navigation;
+<h1>Error</h1>
+
+
+
+<div class="container">
+	<h2>An Error Has Occured while Processing the request</h2>
+	<button @onclick="GoToHome">Go to Home Page</button>
+</div>
+
+@code {
+	private void GoToHome()
+	{
+		navigation.NavigateTo("/");
+	}
+}

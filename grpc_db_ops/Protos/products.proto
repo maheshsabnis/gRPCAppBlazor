@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "grpc_db_ops";
+
+package products;
+
+service ProductsService {
+ rpc GetAll (Empty) returns (Products);
+ rpc GetById (ProductRowIdFilter) returns (Product);
+ rpc Post (Product) returns (Product);
+ rpc Put (Product) returns (Product);
+ rpc Delete (ProductRowIdFilter) returns (Empty);
+}
+
+
+message Empty{
+
+}
+message Product {
+  int32 ProductRowId = 1;
+  string ProductId  = 2;
+  string ProductName = 3;
+  string CategoryName = 4; 
+  string Manufacturer = 5;
+  int32 Price  = 6;
+}
+
+message ProductRowIdFilter {
+ int32 productRowId = 1;
+}
+
+message Products {
+  repeated Product items = 1;
+}

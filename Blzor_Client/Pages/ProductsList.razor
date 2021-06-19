@@ -1,0 +1,78 @@
+﻿@page "/productslist"
+@inject ProductsServiceClient client;
+@inject Blzor_Client.Services.ProductsOpsService service;
+@inject NavigationManager navigate;
+<h3>List of Products</h3>
+
+<button @onclick="navigateToCreate">Create New</button>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Product Row Id</th>
+			<th>Product Id</th>
+			<th>Product Name</th>
+			<th>Category Name</th>
+			<th>Manufacturer</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in products.Items.ToList())
+		{
+		<tr>
+			<td>@item.ProductRowId</td>
+			<td>@item.ProductId</td>
+			<td>@item.ProductName</td>
+			<td>@item.CategoryName</td>
+			<td>@item.Manufacturer</td>
+			<td>@item.Price</td>
+			<td>
+				<button class="btn btn-warning"
+						 @onclick="((evt)=>navigateToUpdate(item.ProductRowId))">Edit</button>
+			</td>
+		</tr>
+		}
+	</tbody>
+
+</table>
+<hr />
+<div>
+	<strong>
+		@data
+	</strong>
+
+</div>
+@code {
+
+
+	private Products products = new Products();
+
+	private string data = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		products = await service.GetProductsAsync();
+
+		data = JsonSerializer.Serialize(products.Items);
+
+	}
+
+
+	protected override bool ShouldRender()
+	{
+
+		return base.ShouldRender();
+	}
+
+	private void navigateToCreate()
+	{
+		navigate.NavigateTo("/createproduct");
+	}
+
+	void navigateToUpdate(int id)
+	{
+		navigate.NavigateTo("/updateproduct/" + id);
+	}
+
+}

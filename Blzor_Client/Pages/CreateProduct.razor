@@ -1,0 +1,72 @@
+﻿@page "/createproduct"
+@inject NavigationManager navigate;
+@inject Blzor_Client.Services.ProductsOpsService service;
+@inject NavigationManager navigation;
+<h3>Create New Product</h3>
+<EditForm Model="product" OnValidSubmit="save">
+	<div class="container">
+		<div class="form-group">
+			<label for="ProductId">Product Id</label>
+			<InputText @bind-Value="@product.ProductId" class="form-control"></InputText>
+		</div>
+		<div class="form-group">
+			<label for="ProductName">Product Name</label>
+			<InputText @bind-Value="@product.ProductName" class="form-control"></InputText>
+		</div>
+		<div class="form-group">
+			<label for="CategoryName">Category Name</label>
+			<InputSelect @bind-Value="@product.CategoryName" class="form-control">
+				@foreach (var item in Categories)
+				{
+					<option value="@item">@item</option>
+				}
+			</InputSelect>
+		</div>
+		<div class="form-group">
+			<label for="Manufacturer">Manufacturer</label>
+			<InputSelect @bind-Value="@product.Manufacturer" class="form-control">
+				@foreach (var item in Manufacturer)
+				{
+					<option value="@item">@item</option>
+				}
+			</InputSelect>
+		</div>
+		<div class="form-group">
+			<label for="BasePrice">Price</label>
+			<InputNumber @bind-Value="@product.Price" class="form-control"></InputNumber>
+		</div>
+		<div class="form-group">
+			<input type="button" class="btn btn-warning" value="Clear" />
+			<input type="submit" class="btn btn-success" value="Save" />
+		</div>
+	</div>
+</EditForm>
+@code {
+	private Product product = new Product();
+	private List<string> Categories = new List<string>()
+{
+		"Electronics", "Electrical", "IT", "Food", "Power","Cloths"
+	};
+	private List<string> Manufacturer = new List<string>()
+{
+		"MS-Electronics", "TS-ElctroSystems", "LS-ITSystems",
+		"MS-Foods","LS-Kitchen", "TS-Eletro-Powers", "LMS-Fashion"
+	};
+	private async Task save()
+	{
+		product = await service.CreateProductAsync(product);
+		if (product.ProductRowId != 0)
+		{
+			navigate.NavigateTo("/productslist");
+		}
+		else
+		{
+			navigate.NavigateTo("/error");
+		}
+	}
+
+	private void clear()
+	{ 
+		  product = new Product();
+	}
+}
